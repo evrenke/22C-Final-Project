@@ -2,14 +2,37 @@
 #include <iostream>
 #include <string>
 
-int takeIntegerInput(int min, int max);
-int takeIntegerInput();
-double takeDoubleInput();
-char takeCharInput();
-std::string takeStringInput();
-void printOptionsList(std::string options[], int length);
+class Menu
+{
+private:
+	std::string *options;
+	int length;
+public:
+	Menu()
+	{
+		options = 
+		new std::string
+		{
+			"THIS MENU HAS NOT HAD ITS OPTIONS DEFINFED",
+			"IT IS ONLY MEANT FOR USER INPUT FUNCTIONS"
+		};
+		length = 2;
+	}
+	Menu(std::string opt[], int len)
+	{
+		options = opt;
+		length = len;
+	}
+	int getOptionsLength() { return length; }
+	int takeRangedIntInput(int min, int max);
+	int takeIntegerInput();
+	double takeDoubleInput();
+	char takeCharInput();
+	std::string takeStringInput();
+	int printOptionsList();
+};
 
-int takeIntegerInput(int min, int max)
+int Menu::takeRangedIntInput(int min, int max)
 {
 	int chosen = 0;
 	bool properNumber = false;
@@ -32,12 +55,12 @@ int takeIntegerInput(int min, int max)
 	return chosen;
 }
 
-int takeIntegerInput()
+int Menu::takeIntegerInput()
 {
-	return takeIntegerInput(-2147483647, 2147483647); // max range
+	return takeRangedIntInput(-2147483647, 2147483647); // max range
 }
 
-double takeDoubleInput()
+double Menu::takeDoubleInput()
 {
 	double chosen = 0;
 	bool properNumber = false;
@@ -60,7 +83,7 @@ double takeDoubleInput()
 	return chosen;
 }
 
-char takeCharInput()
+char Menu::takeCharInput()
 {
 	char chosen = '0';
 	bool properChar = false;
@@ -79,7 +102,7 @@ char takeCharInput()
 	system("CLS");
 	return chosen;
 }
-std::string takeStringInput()
+std::string Menu::takeStringInput()
 {
 	std::string chosen = "";
 	bool properString = false;
@@ -99,10 +122,12 @@ std::string takeStringInput()
 	return chosen;
 }
 
-void printOptionsList(std::string options[], int length)
+int Menu::printOptionsList()
 {
-	for (int i = 0; i < length; i++)
+	int optionsIndex;
+	for (optionsIndex = 0; optionsIndex < length; optionsIndex++)
 	{
-		std::cout << (i + 1) << ")" << options[i] << std::endl;
+		std::cout << (optionsIndex + 1) << ")" << options[optionsIndex] << std::endl;
 	}
+	return takeRangedIntInput(1, optionsIndex);
 }
