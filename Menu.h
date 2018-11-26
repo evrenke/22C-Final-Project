@@ -8,16 +8,6 @@ private:
 	std::string *options;
 	int length;
 public:
-	Menu()
-	{
-		options = 
-		new std::string
-		{
-			"THIS MENU HAS NOT HAD ITS OPTIONS DEFINFED",
-			"IT IS ONLY MEANT FOR USER INPUT FUNCTIONS"
-		};
-		length = 2;
-	}
 	Menu(std::string opt[], int len)
 	{
 		options = opt;
