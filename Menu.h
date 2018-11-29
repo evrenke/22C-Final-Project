@@ -8,6 +8,11 @@ private:
 	std::string *options;
 	int length;
 public:
+	Menu()
+	{
+		options = new std::string{ "DO NOT USE"};
+		length = 0;
+	}
 	Menu(std::string opt[], int len)
 	{
 		options = opt;
@@ -29,7 +34,7 @@ int Menu::takeRangedIntInput(int min, int max)
 	std::cout << std::endl;
 	do
 	{
-		std::cout << "Enter a valid integer: ";
+		std::cout << "Enter a valid INTEGER: ";
 		std::string input = "";
 		std::getline(std::cin, input);
 		try {
@@ -57,7 +62,7 @@ double Menu::takeDoubleInput()
 	std::cout << std::endl;
 	do
 	{
-		std::cout << "Enter a valid double: ";
+		std::cout << "Enter a valid DOUBLE: ";
 		std::string input = "";
 		std::getline(std::cin, input);
 		try {
@@ -80,7 +85,7 @@ char Menu::takeCharInput()
 	std::cout << std::endl;
 	do
 	{
-		std::cout << "Enter a valid char: ";
+		std::cout << "Enter a valid CHAR: ";
 		std::string input = "";
 		std::getline(std::cin, input);
 		if (input.length() == 1)
@@ -99,7 +104,7 @@ std::string Menu::takeStringInput()
 	std::cout << std::endl;
 	do
 	{
-		std::cout << "Enter a valid string: ";
+		std::cout << "Enter a valid STRING: ";
 		std::string input = "";
 		std::getline(std::cin, input);
 		if (input.length() != 0)
