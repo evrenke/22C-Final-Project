@@ -29,7 +29,7 @@ public:
 
 int Menu::takeRangedIntInput(int min, int max)
 {
-	int chosen = 0;
+	int chosen = min;
 	bool properNumber = false;
 	std::cout << std::endl;
 	do
