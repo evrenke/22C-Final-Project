@@ -5,29 +5,122 @@
 //  Created by Oh Reum Kwon on 11/7/18.
 //  Copyright © 2018 Oh Reum Kwon. All rights reserved.
 //
+/*
+	Authors: Evren Keskin, Jason Hagene, Oh Reum Kwom, Tommasso M Framba
 
+	Date: 11/29/2018
+
+*/
+#include <string>
 #include <iostream>
+#include <fstream>
+
+#include "Menu.h"
 #include "Contact.h"
-#include "Location.h"
-using namespace std;
+
+#define _CRTDBG_MAP_ALLOC  
+#include <stdlib.h>  
+#include <crtdbg.h>  
+
+/*
+	https://simplemaps.com/data/us-cities
+*/
+
+/*
+	Read contact info from file into BST
+
+	In a loop
+		Ask user for option
+		Do result of option
+		Update files
+		Ask if user wants to exit program
+*/
+void pause();
 
 int main()
 {
-    Location home("John", "408-123-4567", "home", "1042 Bret Hill Court", 37.263310, -121.893110);
-    Location school("De Anza College", "408-908-7654", "school", "21250 Stevens Creek Blvd, Cupertino", 37.319200, -122.044880);
-    
-    cout << "Printing Information about " << home.getType() << ":" << endl;
-    cout << home.getName() << endl;
-    cout << home.getNumber() << endl;
-    cout << home.getAddress() << endl << endl;
-    
-    cout << "Printing Information about " << school.getType() << ":" << endl;
-    cout << school.getName() << endl;
-    cout << school.getNumber() << endl;
-    cout << school.getAddress() << endl << endl;
-    
-    cout << "The distance between " << home.getType() << " and " << school.getType() <<
-    " is " << home.getDistance(school) << " miles" << endl;
-    
-    return 0;
+	
+	std::ifstream inputFile;
+	inputFile.open("Contacts.txt");
+
+	std::string name, address, number, coordinates;
+	int phoneNumber;
+	Location location;
+
+	while (inputFile)
+	{
+		if (inputFile.eof()) break;
+		getline(inputFile, name, '\n');
+		getline(inputFile, address, '\n');
+		getline(inputFile, number, '\n');
+		getline(inputFile, coordinates, '\n');
+		phoneNumber = std::stoi(number);
+		location = Location(std::stod(coordinates.substr(0, coordinates.find(' '))), 
+			std::stod(coordinates.substr(coordinates.find(' ') + 1, coordinates.length())));
+
+		Contact *newContact = new Contact(name, address, phoneNumber, location);
+
+		//add to binary tree
+	}
+	inputFile.close();
+
+
+	int optionsSize = 8;
+	std::string options[] =
+	{
+		"Add New Contact",
+		"Delete A Contact",
+		"Search Contacts by name",
+		"Modify Contact Information(location, phone number, etc.)",
+		"List all users",
+		"Print Tree by name of User",
+		"Distance Calculator",
+		"Leave the menu",
+
+	};
+	Menu mainmenu = Menu(options, optionsSize);
+	
+	int answer = -1;
+	while (answer != mainmenu.getOptionsLength()) // exiting
+	{
+		answer = mainmenu.printOptionsList();
+
+		switch (answer)
+		{
+		case 1:
+			std::cout << "Your input: " << mainmenu.takeStringInput() << std::endl;
+			break;
+		case 2:
+			std::cout << "Your input: " << mainmenu.takeCharInput() << std::endl;
+			break;
+		case 3:
+			std::cout << "Your input: " << mainmenu.takeDoubleInput() << std::endl;
+			break;
+		case 4:
+			std::cout << "Your input: " << mainmenu.takeIntegerInput() << std::endl;
+			break;
+		case 5:
+			std::cout << "You chose to exit the menu, good for you!" << std::endl;
+			break;
+		case 6:
+			std::cout << "You chose to exit the menu, good for you!" << std::endl;
+			break;
+		case 7:
+			std::cout << "You chose to exit the menu, good for you!" << std::endl;
+			break;
+		case 8:
+			std::cout << "You chose to exit the menu, good for you!" << std::endl;
+			break;
+		}
+	}
+	pause();
+	_CrtDumpMemoryLeaks();
+	return 0;
+}
+
+void pause()
+{
+	std::cout << "Press any key to continue..." << std::endl;
+	std::cin.get();
+	system("CLS");
 }
