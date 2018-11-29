@@ -2,17 +2,11 @@
 #include <math.h>
 
 Location::Location() {
-	name = "Null Island";
-	address = "Middle of the Ocean";
-	phoneNumber = "N/A";
 	latitude = 0;
 	longitude = 0;
 }
 
-Location::Location(std::string inName, std::string inNumber, std::string inAddress, double inLat, double inLong) {
-	name = inName;
-	phoneNumber = inNumber;
-	address;
+Location::Location( double inLat, double inLong) {
 	latitude = inLat;
 	longitude = inLong;
 }
