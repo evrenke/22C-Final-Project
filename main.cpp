@@ -1,126 +1,157 @@
 //
 //  main.cpp
-//  22C_Project
+//  22C_Lab_5
 //
-//  Created by Oh Reum Kwon on 11/7/18.
-//  Copyright © 2018 Oh Reum Kwon. All rights reserved.
+//  Created by Oh Reum Kwon and Tommaso Framba on 11/23/18.
 //
 /*
-	Authors: Evren Keskin, Jason Hagene, Oh Reum Kwom, Tommasso M Framba
-
-	Date: 11/29/2018
-
+Our main creates two binary search trees from the BirthdaysOutput.txt and prints them
+using different ranversial manners
 */
+
 #include <string>
 #include <iostream>
+#include "Node.h"
+#include "People.h"
+#include "Bst.h"
 #include <fstream>
-
-#include "Menu.h"
-#include "Contact.h"
-
-#define _CRTDBG_MAP_ALLOC  
-#include <stdlib.h>  
-#include <crtdbg.h>  
-
-/*
-	https://simplemaps.com/data/us-cities
-*/
-
-/*
-	Read contact info from file into BST
-
-	In a loop
-		Ask user for option
-		Do result of option
-		Update files
-		Ask if user wants to exit program
-*/
-void pause();
+using namespace std;
 
 int main()
 {
-	
-	std::ifstream inputFile;
-	inputFile.open("Contacts.txt");
-
-	std::string name, address, number, coordinates;
-	int phoneNumber;
-	Location location;
-
-	while (inputFile)
+	string deleteStr;
+	Bst<string> nameTree;
+	nameTree.setType(1);
+	Bst<string> birthdayTree;
+	birthdayTree.setType(2);
+	string nameLine;
+	ifstream myfile("InputData.txt");
+	ofstream myfile2("Output.txt");
+	ofstream myfile4;
+	if (myfile.is_open())
 	{
-		if (inputFile.eof()) break;
-		getline(inputFile, name, '\n');
-		getline(inputFile, address, '\n');
-		getline(inputFile, number, '\n');
-		getline(inputFile, coordinates, '\n');
-		phoneNumber = std::stoi(number);
-		location = Location(std::stod(coordinates.substr(0, coordinates.find(' '))), 
-			std::stod(coordinates.substr(coordinates.find(' ') + 1, coordinates.length())));
-
-		Contact *newContact = new Contact(name, address, phoneNumber, location);
-
-		//add to binary tree
-	}
-	inputFile.close();
-
-
-	int optionsSize = 8;
-	std::string options[] =
-	{
-		"Add New Contact",
-		"Delete A Contact",
-		"Search Contacts by name",
-		"Modify Contact Information(location, phone number, etc.)",
-		"List all users",
-		"Print Tree by name of User",
-		"Distance Calculator",
-		"Leave the menu",
-
-	};
-	Menu mainmenu = Menu(options, optionsSize);
-	
-	int answer = -1;
-	while (answer != mainmenu.getOptionsLength()) // exiting
-	{
-		answer = mainmenu.printOptionsList();
-
-		switch (answer)
+		while (getline(myfile, nameLine))
 		{
-		case 1:
-			std::cout << "Your input: " << mainmenu.takeStringInput() << std::endl;
-			break;
-		case 2:
-			std::cout << "Your input: " << mainmenu.takeCharInput() << std::endl;
-			break;
-		case 3:
-			std::cout << "Your input: " << mainmenu.takeDoubleInput() << std::endl;
-			break;
-		case 4:
-			std::cout << "Your input: " << mainmenu.takeIntegerInput() << std::endl;
-			break;
-		case 5:
-			std::cout << "You chose to exit the menu, good for you!" << std::endl;
-			break;
-		case 6:
-			std::cout << "You chose to exit the menu, good for you!" << std::endl;
-			break;
-		case 7:
-			std::cout << "You chose to exit the menu, good for you!" << std::endl;
-			break;
-		case 8:
-			std::cout << "You chose to exit the menu, good for you!" << std::endl;
-			break;
+			string bdayLine;
+			getline(myfile, bdayLine);
+			birthdayTree.addBstNode(nameLine, bdayLine);
+			nameTree.addBstNode(nameLine, bdayLine);
+		}
+		myfile.close();
+	}
+
+	int selection = 0;
+
+	while (selection != -1) {
+		cout << "Select an option: " << endl << "1. Print Tree to File and Console" << endl << "2. To Enter a Value" << 
+			endl << "3. Delete a Value" << endl << "4. Search for a Value" << endl << "-1. To Exit"
+			<< endl << endl;
+		cin >> selection;
+		if (selection == 1) {
+			if (nameTree.getCount() > 0 ) {
+				myfile2 << "Pre-Order Of Tree:" << endl;
+				cout << "Pre-Order Of Tree:" << endl;
+				myfile2.close();
+				nameTree.PrintPreorder();
+				myfile2.open("Output.txt", std::ofstream::app);
+				myfile2 << endl << "Post-Order Of Tree:" << endl;
+				cout << endl << "Post-Order Of Tree:" << endl;
+				myfile2.close();
+				nameTree.PrintPostorder();
+				myfile2.open("Output.txt", std::ofstream::app);
+				myfile2 << endl << "In-Order Of Tree:" << endl;
+				cout << endl << "In-Order Of Tree:" << endl;
+				myfile2.close();
+				nameTree.PrintInorder();
+				myfile2.open("Output.txt", std::ofstream::app);
+				cout << endl << "Breadth-First of Tree: " << endl;
+				myfile2 << endl << "Breadth-First of Tree: " << endl;
+				nameTree.PrintBreadthFirst();
+				cout << endl << endl;
+				nameTree.PrintTree2D();
+			}
+			else {
+				cout << "Trees are empty" << endl;
+			}
+		}
+		else if (selection == 2) {
+			string tempName;
+			string tempBirthday;
+			cout << "Enter a name: ";
+			cin.ignore();
+			getline(cin, tempName);
+			cout << "Enter a Birthday: ";
+			getline(cin, tempBirthday);
+			birthdayTree.addBstNode(tempName, tempBirthday);
+			nameTree.addBstNode(tempName, tempBirthday);
+			myfile4.open("InputData.txt", std::ofstream::app);
+			myfile4 << tempName << endl << tempBirthday << endl;
+			myfile4.close();
+		}
+		else if (selection == 3) {
+			int nameOrBirthday;
+			cout << "Delete in 1.Name or 2.Birthday: ";
+			cin >> nameOrBirthday;
+
+			if (nameOrBirthday == 1) {
+				string name;
+				cout << "Enter the name: ";
+				cin.ignore();
+				getline(cin, name);
+				nameTree.DeleteValue(name);
+				nameTree.PrintTreeToFile();
+				string line;
+				
+			}
+			else if (nameOrBirthday == 2) {
+				string bday;
+				cout << "Enter birthday: ";
+				cin.ignore();
+				getline(cin, bday);
+				string temp = birthdayTree.DeleteValue(bday);
+				deleteStr += temp;
+
+				bool andNext = false;
+				string line;
+				while (getline(myfile, line))
+				{
+					if (line == temp) {
+						line.replace(line.find(line), line.length(), "");
+					}
+					if (line.find(temp)) {
+						andNext = true;
+					}
+					else {
+						andNext = false;
+					}
+					line.replace(line.find(temp), temp.length(), "");
+				}
+			}
+			else {
+				cout << endl << "Bad selection" << endl;
+			}
+		}
+		else if (selection == 4) {
+			string nameOr;
+			cout << "Value to Search: ";
+			cin.ignore();
+			getline(cin, nameOr);
+			People<string>* temp = nameTree.SearchValue(nameOr);
+			if (temp == NULL) {
+				cout << "Bad Search" << endl;
+			}
+			else {
+				cout << "Name: " << temp->getName() << "Bday: " << temp->getBirthday() << endl;
+				cout << "Enter Value to Modify: ";
+				string temp2;
+				getline(cin, temp2);
+				temp->setName(temp2);
+			}
+
+			nameTree.PrintTreeToFile();
 		}
 	}
-	pause();
-	_CrtDumpMemoryLeaks();
+	nameTree.PrintTreeToFile();
+	system("pause");
 	return 0;
-}
-
-void pause()
-{
-	std::cout << "Press any key to continue..." << std::endl;
-	std::cin.get();
-	system("CLS");
 }
