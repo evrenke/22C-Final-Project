@@ -1,3 +1,14 @@
+/*
+	Author: Evren Keskin
+
+	Version: 12/03/2018
+
+	Description:
+		This is a generalized menu object
+		that can take inputs of any specification
+		and allow an easy usage of list-based menus to the user
+*/
+
 #pragma once
 #include <iostream>
 #include <string>
@@ -10,7 +21,8 @@ private:
 public:
 	Menu()
 	{
-		options = new std::string{ "DO NOT USE"};
+		std::string choices[] = { "DO NOT USE"};
+		options = choices;
 		length = 0;
 	}
 	Menu(std::string opt[], int len)
@@ -25,11 +37,12 @@ public:
 	char takeCharInput();
 	std::string takeStringInput();
 	int printOptionsList();
+	void pause();
 };
 
 int Menu::takeRangedIntInput(int min, int max)
 {
-	int chosen = min;
+	int chosen = 0;
 	bool properNumber = false;
 	std::cout << std::endl;
 	do
@@ -39,13 +52,14 @@ int Menu::takeRangedIntInput(int min, int max)
 		std::getline(std::cin, input);
 		try {
 			chosen = std::stoi(input);
-			properNumber = true;
+			if (chosen >= min && chosen <= max)
+				properNumber = true;
 		}
 		catch (...)
 		{
 			properNumber = false;
 		}
-	} while (!properNumber && (chosen <= min || chosen > max));
+	} while (!properNumber);
 	system("CLS");
 	return chosen;
 }
@@ -125,4 +139,12 @@ int Menu::printOptionsList()
 		std::cout << (optionsIndex + 1) << ")" << options[optionsIndex] << std::endl;
 	}
 	return takeRangedIntInput(1, optionsIndex);
+}
+
+void Menu::pause()
+{
+	std::cout << "Press any key to continue..." << std::endl;
+	std::string waste = "";
+	std::getline(std::cin, waste);
+	system("CLS");
 }
