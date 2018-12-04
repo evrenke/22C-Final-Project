@@ -15,8 +15,51 @@ private:
 		total = total % size;
 		return total;
 	}
-	//TODO
+	
+	//Removes a HashNode that is equal to toRemove
 	void remove(HashNode<ot>* toRemove) {
+		//If the HashTable is empty
+		if (total == 0) {
+			return;
+		}
+		//If the HashTable only has one node
+		else if (total == 1) {
+			total = 0;
+			arr = NULL;
+			return;
+		}
+		//If there is more than one node
+		else {
+			//If the node to be deleted is equal to the head
+			if (toRemove == arr) {
+				HashNode<ot> *temp = arr;
+				arr = arr->getNext();
+				total--;
+				delete temp;
+			}
+			//If the node to be deleted is not the head
+			else {
+				HashNode<ot> *pPrev = nullptr;//Previous pointer
+				HashNode<ot> *pCurr = arr;//Current pointer
+				int counter = 0;//Counter starts at 0
+				//Traverse the entire HashTable
+				while (counter < total)
+				{
+					pPrev = pCurr;
+					pCurr = pCurr->getNext();
+					//If found. Break out of the while loop.
+					if (pCurr == toRemove) {
+						counter = total;
+					}
+					counter++;
+				}
+				//Set the previous node of the current which equals toRemove
+				//to point to the node that the current points to
+				pPrev->setNext(pCurr->getNext());
+				total--;//Minus total by 1
+				delete pCurr;//Delete the current node
+			}
+		}
 	}
 public:
 	//Size defaults to 11
