@@ -77,11 +77,11 @@ public:
 		BinaryNode<T>* pSearch = root;
 		while (true)
 		{
-			if (pSearch->getData() == data)
+			if (*pSearch->getData() == data)
 			{
-				return pSearch->getData();
+				return pSearch;
 			}
-			else if (pSearch->getData() > data)
+			else if (*pSearch->getData() > data)
 			{
 				if (pSearch->getLeftChild() == nullptr) return nullptr;
 				pSearch = pSearch->getLeftChild();
@@ -94,7 +94,7 @@ public:
 		}
 	}
 
-	void remove(T toRemove)
+	BinaryNode<T> * remove(T toRemove)
 	{
 		BinaryNode<T>** pSearch = &root;
 		while (toRemove != (*pSearch)->getData())
@@ -110,7 +110,7 @@ public:
 				*pSearch = (*pSearch)->getRightChild();
 			}
 		}
-		remove(pSearch);
+		return DeleteNodeInBST(pSearch);
 	}
 	BinaryNode<T> * DeleteNodeInBST(BinaryNode<T>* root, int data)
 	{
