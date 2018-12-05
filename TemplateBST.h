@@ -1,6 +1,13 @@
 #pragma once
 #include "BinaryNode.h"
+/*
+Author: Tommaso and Evren
 
+This file can do several functions such as add, search, remove, and getRight or getLeft most 
+for a binary search Tree. 
+*/
+
+//Class for contact binary search tree
 class ContactBST {
 private:
 	//Returns the left/rightmost node below a certain root (inclusive of the root itself)
@@ -23,6 +30,7 @@ private:
 		return temp;
 	}
 protected:
+	//adds a binary node
 	void add(BinaryNode<Contact *>* pNode)
 	{
 		if (root == NULL)
@@ -53,6 +61,7 @@ protected:
 			}
 		}
 	}
+	//searches a node and can modify it
 	BinaryNode<Contact *>* searchAsNode(BinaryNode<Contact *> *pSearch, Contact * data)
 	{
 		if (root == nullptr || *(root->getData()) == *data)
@@ -65,7 +74,7 @@ protected:
 		// Key is smaller than root's key 
 		return searchAsNode(root->getLeftChild(), data);
 	}
-
+	//Deletes a node in the bst
 	BinaryNode<Contact *> * DeleteNodeInBST(BinaryNode<Contact *>* root, Contact * data)
 	{
 		if (root == nullptr) return root;
@@ -104,7 +113,7 @@ public:
 	BinaryNode<Contact *>* root;
 	ContactBST() { root = nullptr; }
 	ContactBST(Contact *head) { root = new BinaryNode<Contact *> (head); }
-	//Don't worry the children are deleted in the BinaryNode destructor
+	//Children are deleted in the BinaryNode destructor
 	~ContactBST()
 	{
 		delete root;
