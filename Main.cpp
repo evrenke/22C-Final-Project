@@ -395,11 +395,11 @@ void inorderChart(BinaryNode<Contact *> *data)
 void printValueTable(HashTable<Contact *> *data) {
 	for (int i = 0; i < data->getSize(); i++) {
 		std::cout << i + 1 << ")." << " ";
-		if (((*data).arr[i].getData()) == nullptr)
+		if (data->arr[i].getData() == nullptr)
 			std::cout << "NULL";
 		else {
-			std::cout << (*((*data).arr[i].getData())).getName();
-			HashNode<Contact *>* temp = data->arr[i].getNext();
+			std::cout << *(data->arr[i].getData());
+			HashNode<Contact*>* temp = data->arr[i].getNext();
 			while (temp != nullptr) {
 				std::cout << ", " << *temp->getData();
 				temp = temp->getNext();
