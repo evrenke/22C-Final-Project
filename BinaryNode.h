@@ -7,7 +7,7 @@ private:
 	BinaryNode<ot>* leftChild;
 public:
 	BinaryNode() {
-		setData(nullptr);
+		//setData(nullptr);
 		setLeftChild(nullptr);
 		setRightChild(nullptr);
 	}
