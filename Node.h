@@ -5,25 +5,25 @@ class Node
 {
 private:
 	Node * ptr;
-	ObjectType* objectPtr;
+	ObjectType object;
 protected:
-	void setData(ObjectType* ot) {
-		objectPtr = ot;
+	void setData(ObjectType ot) {
+		object = ot;
 	}
 public:
 	Node() {
 		ptr = nullptr;
-		objectPtr = nullptr;
+		object = NULL;
 	}
-	Node(Node *nextPtr, ObjectType *ot)
+	Node(Node *nextPtr, ObjectType ot)
 	{
 		ptr = nextPtr;
-		objectPtr = ot;
+		object = ot;
 	}
-	Node(ObjectType *ot)
+	Node(ObjectType ot)
 	{
 		ptr = nullptr;
-		objectPtr = ot;
+		object = ot;
 	}
 
 	//Returns the pointer to the next Node
@@ -36,12 +36,11 @@ public:
 	}
 
 	//Returns the pointer to the object within the Node
-	ObjectType* getData() {
-		return objectPtr;
+	ObjectType getData() {
+		return object;
 	}
 
 	~Node()
 	{
-		delete objectPtr;
 	}
 };

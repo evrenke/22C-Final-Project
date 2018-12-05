@@ -13,7 +13,7 @@ public:
 
 	//Returns the distance between 2 different Location classes using the Great Circle Formula
 	double getDistance(Location);
-	std::string getCoordiantes();
+	std::string getCoordinates();
 	void setRelativeDistance(Location);
 	void setRelativeDistance(double d) { relativeDistance = d; }
 	double getRelativeDistance() { return relativeDistance; }

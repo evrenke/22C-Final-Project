@@ -23,26 +23,8 @@ double Location::getDistance(Location otherPlace) {
 	return radians * radius;
 }
 
-std::string Location::getCoordiantes() {
-	double tempLat = latitude, tempLong = longitude;
-	std::string latOut = "", longOut = "";
-
-	latOut += std::to_string(static_cast<int>(tempLat)) + "*";
-	longOut += std::to_string(static_cast<int>(tempLong)) + "*";
-
-	tempLat = abs((tempLat - static_cast<int>(tempLat))) * 60;
-	tempLong = abs((tempLong - static_cast<int>(tempLong))) * 60;
-
-	latOut += std::to_string(static_cast<int>(tempLat)) + "\'";
-	longOut += std::to_string(static_cast<int>(tempLong)) + "\'";
-
-	tempLat = (tempLat - static_cast<int>(tempLat)) * 60;
-	tempLong = (tempLong - static_cast<int>(tempLong)) * 60;
-
-	latOut += std::to_string(static_cast<int>(tempLat)) + "\"";
-	longOut += std::to_string(static_cast<int>(tempLong)) + "\"";
-
-	return "(" + latOut + ", " + longOut + ")";
+std::string Location::getCoordinates() {
+	return std::to_string(latitude) + "\t" + std::to_string(longitude);
 }
 
 void Location::setRelativeDistance(Location otherPlace) {

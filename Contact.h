@@ -12,14 +12,13 @@ public:
 	{
 		name = "No man";
 		address = "Middle of Nowhere";
-		int nums[] =
+		contactNum = new int[3]
 		{
 			0, 0, 0
 		};
-		contactNum = nums;
 		location = Location();
 	}
-	Contact(std::string n, std::string a, int num[], Location l)
+	Contact(std::string n, std::string a, int *num, Location l)
 	{
 		name = n;
 		address = a;
@@ -28,10 +27,10 @@ public:
 	}
 	~Contact()
 	{
-		delete[] contactNum;
+
 	}
 	std::string getName() { return name; }
-	std::string getAdress() { return address; }
+	std::string getAddress() { return address; }
 	int* getContactNum() { return contactNum; }
 	Location getLocation(){ return location; }
 

@@ -7,13 +7,13 @@ private:
 	std::string key;
 public:
 	HashNode() {
-		data = NULL;
-		next = NULL;
+		data = nullptr;
+		next = nullptr;
 		key = "";
 	}
 	HashNode(ot& obj, std::string str) {
 		data = &obj;
-		next = NULL;
+		next = nullptr;
 		key = str;
 	}
 	~HashNode() {

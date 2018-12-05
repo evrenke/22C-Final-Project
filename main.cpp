@@ -1,6 +1,8 @@
 /*
 Authors: Evren Keskin, Jason Hagene, Oh Reum Kwom, Tommasso M Framba
-Date: 11/29/2018
+
+Date: 12/05/2018
+
 Description:
 	Fuck idk
 */
@@ -12,11 +14,13 @@ Description:
 #include "Contact.h"
 #include "TemplateBST.h"
 #include "HashTable.h"
+
 /*
 #define _CRTDBG_MAP_ALLOC  
 #include <stdlib.h>  
 #include <crtdbg.h>  
 */
+
 /*
 https://simplemaps.com/data/us-cities
 */
@@ -30,16 +34,25 @@ Update files
 Ask if user wants to exit program
 */
 
-template <class T>
-void updateFiles(std::ofstream*, BST<T> *);
+template<class T>
+void updateFiles(std::ofstream *out, BinaryNode<T> *data);
+
+template<class T>
+void eraseContacts(BinaryNode<T> *data);
+
 int* getPhoneNumberInput();
+
 int main()
 {
 	std::string dataFile = "Contacts.txt";
 	std::ofstream outputFile;
 	std::ifstream inputFile;
 	inputFile.open(dataFile);
-
+	if (!inputFile.is_open())
+	{
+		std::cerr << "Cant find file Contacts.txt" << std::endl;
+		exit(4);
+	}
 	HashTable<Contact *> contactHash;
 	BST<Contact *> contactBST;
 
@@ -52,24 +65,26 @@ int main()
 	{
 		if (inputFile.eof()) break;
 		getline(inputFile, name, '\n');
+		if (inputFile.eof()) break;
 		getline(inputFile, address, '\n');
+		if (inputFile.eof()) break;
 		getline(inputFile, phoneNumber, '\n');
+		if (inputFile.eof()) break;
 		getline(inputFile, coordinates, '\n');
 		// a string formatted as 6505551234
 		nums = new int[3]
 		{
 			std::stoi(phoneNumber.substr(0, 3)),
-			std::stoi(phoneNumber.substr(3, 3)),
+			std::stoi(phoneNumber.substr(3, 3)),//why this works and 3, 6 doesn't I will never know
 			std::stoi(phoneNumber.substr(6, 10))
 		};
-		std::cout << nums[1];
-		longitude = std::stod(coordinates.substr(0, coordinates.find(' ')));
-		latitude = std::stod(coordinates.substr(coordinates.find(' ') + 1, coordinates.length()));
-		location = Location(longitude,latitude);
+		latitude = std::stod(coordinates.substr(0, coordinates.find('\t')));
+		longitude = std::stod(coordinates.substr(coordinates.find_last_of('\t') + 1, coordinates.length()));
+		location = Location(latitude, longitude);
 		newContact = new Contact(name, address, nums, location);
 		std::cout << *newContact;
 		contactHash.add(name, newContact);
-		contactBST.add(&newContact);
+		contactBST.add(newContact);
 	}
 	inputFile.close();
 
@@ -77,14 +92,14 @@ int main()
 	int optionsSize = 8;
 	std::string options[] =
 	{
-		"Add New Contact",
-		"Delete A Contact",
-		"Search Contacts by name",
-		"Modify Contact Information(location, phone number, etc.)",
-		"List all users",
-		"Print Tree by name of User",
-		"Distance Calculator",
-		"Leave the menu",
+		"Add New Contact", // actually finished
+		"Delete A Contact", // no, search and remove function broken
+		"Search Contacts by name", // no, search broken
+		"Modify Contact Information(location, phone number, etc.)", // no, search broken
+		"List all users", // no , nothing is here
+		"Print Tree by name of User", // no nothing is here
+		"Distance Calculator", // no nothing is here
+		"Leave the menu", // no...wait yes but I guess its not that hard
 
 	};
 	Menu mainmenu = Menu(options, optionsSize);
@@ -111,20 +126,20 @@ int main()
 			address = mainmenu.takeStringInput();
 			std::cout << name << std::endl << phoneNumber << std::endl << address << std::endl;
 			std::cout << "What is their longitude and latitude?" << std::endl;
-			std::cout << "Longitude:" << std::endl;
-			longitude = mainmenu.takeDoubleInput();
 			std::cout << "Latitude:" << std::endl;
 			latitude = mainmenu.takeDoubleInput();
+			std::cout << "Longitude:" << std::endl;
+			longitude = mainmenu.takeDoubleInput();
 			std::cout << "Name        :" << name << std::endl;
 			std::cout << "Phone Number:" << phoneNumber << std::endl;
 			std::cout << "Address     :" << address << std::endl;
-			std::cout << "Location    :" << longitude << " , " << latitude << std::endl;
+			std::cout << "Location    :" << latitude << " , " << longitude << std::endl;
 
-			location = Location(longitude, latitude);
+			location = Location(latitude, longitude);
 
 			newContact = new Contact(name, address, nums, location);
 			contactHash.add(name, newContact);
-			contactBST.add(&newContact);
+			contactBST.add(newContact);
 			break;
 		case 2:
 			//fix search function first
@@ -134,14 +149,15 @@ int main()
 			if (contactHash.get(name))
 			{
 				newContact = *contactHash.get(name);
+				contactBST.remove(*contactHash.get(name));
+				contactHash.remove(name);
 				std::cout << "We did it team" << std::endl;
 				std::cout << *newContact;
-				contactHash.remove(name);
 			}
 			else std::cout << "We'll get em next time" << std::endl;
 			break;
 		case 3:
-			//fix search function first
+			//fix search function
 			std::cout << "Search friend contact:" << std::endl;
 			std::cout << "Which friend's contact do you want to see?" << std::endl;
 			name = mainmenu.takeStringInput();
@@ -155,6 +171,15 @@ int main()
 			break;
 		case 4:
 			std::cout << "Modify friend contact info:" << std::endl;
+			std::cout << "Which friend's contact do you want to change?" << std::endl;
+			name = mainmenu.takeStringInput();
+			if (contactHash.get(name))
+			{
+				newContact = *contactHash.get(name);
+				std::cout << "We did it team" << std::endl;
+				std::cout << *newContact;
+			}
+			else std::cout << "We'll get em next time" << std::endl;
 			break;
 		case 5:
 			std::cout << "List all friends:" << std::endl;
@@ -193,17 +218,45 @@ int main()
 			std::cout << "You chose to exit the menu, good for you!" << std::endl;
 			break;
 		}
-		updateFiles(&outputFile, &contactBST);
+		outputFile.open(dataFile);
+		updateFiles(&outputFile, contactBST.root);
+		outputFile.close();
 		mainmenu.pause();
 	}
+	//DECONSTRUCT HASH TABLE AND BINARY SEARCH TREE OF POINTERS
+	//ONLY DELETE CONTACTS FROM BST, THEN DECONTRUCT HASHTABLE WITHOUT WORRYING
+	eraseContacts(contactBST.root);
+	contactBST.~BST();
+	//contactHash.~HashTable();
+
 	//_CrtDumpMemoryLeaks();
 	return 0;
 }
 
 template<class T>
-void updateFiles(std::ofstream *, BST<T> *)
+void updateFiles(std::ofstream *out, BinaryNode<T> *data)
 {
+	if (data != NULL)
+	{
+		updateFiles(out, data->getLeftChild());
+		*out << (*(data->getData())).getName() << std::endl;
+		*out << (*(data->getData())).getAddress() << std::endl;
+		*out << std::to_string(*((*(data->getData())).getContactNum())) << std::to_string(*((*(data->getData())).getContactNum() + 1)) << std::to_string(*((*(data->getData())).getContactNum() + 2)) << std::endl;
+		*out << (*(data->getData())).getLocation().getCoordinates() << std::endl;
+		updateFiles(out, data->getRightChild());
+	}
+}
 
+template<class T>
+void eraseContacts(BinaryNode<T> *data)
+{
+	if (data != nullptr)
+	{
+		eraseContacts(data->getLeftChild());
+		eraseContacts(data->getRightChild());
+		delete (data->getData());
+		data->setInfo(nullptr);
+	}
 }
 
 int * getPhoneNumberInput()
@@ -243,6 +296,6 @@ int * getPhoneNumberInput()
 			validNumber = true;
 		}
 	} while (! validNumber);
-
+	system("CLS");
 	return numbers;
 }

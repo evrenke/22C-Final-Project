@@ -11,7 +11,7 @@ public:
 		setLeftChild(nullptr);
 		setRightChild(nullptr);
 	}
-	BinaryNode(ot *object) {
+	BinaryNode(ot object) {
 		this->setData(object);
 	}
 
@@ -19,8 +19,8 @@ public:
 	void setLeftChild(BinaryNode<ot>* in) { leftChild = in; }
 	BinaryNode<ot>* getRightChild() { return rightChild; }
 	void setRightChild(BinaryNode<ot>* in) { rightChild = in; }
-	const ot* getInfo() { return this->getData(); }
-	void setInfo(ot* in) { this->setData(in); }
+	const ot getInfo() { return this->getData(); }
+	void setInfo(ot in) { this->setData(in); }
 
 	//Deletes all nodes below to prevent memory leaks. Deleting the root will delete the entire tree.
 	//If removing a single node from the tree is desired, use the remove function within the BST class instead.
