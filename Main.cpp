@@ -398,10 +398,10 @@ void printValueTable(HashTable<Contact *> *data) {
 		if (data->arr[i].getData() == nullptr)
 			std::cout << "NULL";
 		else {
-			std::cout << *(data->arr[i].getData());
+			std::cout << (*(data->arr[i].getData()))->getName();
 			HashNode<Contact*>* temp = data->arr[i].getNext();
 			while (temp != nullptr) {
-				std::cout << ", " << *temp->getData();
+				std::cout << ", " << (*temp->getData())->getName();
 				temp = temp->getNext();
 			}
 		}
