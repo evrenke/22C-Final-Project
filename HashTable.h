@@ -4,7 +4,6 @@
 template <class ot>
 class HashTable {
 private:
-	HashNode<ot>* arr;
 	int length;
 	//Very basic hashing algorithm
 	int hash(std::string key) {
@@ -55,6 +54,7 @@ private:
 		}
 	}
 public:
+	HashNode<ot>* arr;
 	//Size defaults to 11
 	HashTable() {
 		arr = new HashNode<ot>[11];
