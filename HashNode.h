@@ -2,7 +2,7 @@
 template <class ot>
 class HashNode {
 private:
-	ot* data;
+	ot data;
 	HashNode<ot>* next;
 	std::string key;
 public:
@@ -12,7 +12,7 @@ public:
 		key = "";
 	}
 	HashNode(ot& obj, std::string str) {
-		data = &obj;
+		data = obj;
 		next = nullptr;
 		key = str;
 	}
@@ -23,12 +23,9 @@ public:
 	std::string getKey() { return key; }
 	void setKey(std::string in) { key = in; }
 
-	ot* getData() { return data; }
+	ot* getData() { return &data; }
 
-	void setData(ot &in) { 
-		data = &in;
-	}
-	void setData(ot* in) { data = in; }
+	void setData(ot in) { data = in; }
 	
 
 	void copy(HashNode<ot>* destination) {

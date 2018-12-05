@@ -122,7 +122,6 @@ public:
 	//Returns NULL if none is found. Beware of carelessly dereferencing it
 	BinaryNode<T>* search(T data)
 	{
-		std::cout << "Now searching: " << *data << std::endl;
 		return searchAsNode(root, data);
 	}
 

@@ -11,6 +11,8 @@ public:
 	Location();
 	Location(double, double);
 
+	double getLatitude() { return latitude; }
+	double getLongitude() { return longitude; }
 	//Returns the distance between 2 different Location classes using the Great Circle Formula
 	double getDistance(Location);
 	std::string getCoordinates();

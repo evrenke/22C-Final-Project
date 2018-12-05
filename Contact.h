@@ -32,7 +32,23 @@ public:
 	std::string getName() { return name; }
 	std::string getAddress() { return address; }
 	int* getContactNum() { return contactNum; }
+	std::string getNumStr()
+	{
+		return std::to_string(contactNum[0]) + std::to_string(contactNum[1]) + std::to_string(contactNum[2]);
+	}
 	Location getLocation(){ return location; }
+	void setAddress(std::string a)
+	{
+		address = a;
+	}
+	void setContactNum(int * num)
+	{
+		contactNum = num;
+	}
+	void setLocation(Location l)
+	{
+		location = l;
+	}
 
 	friend bool operator==(const Contact &c1, const Contact &c2)
 	{

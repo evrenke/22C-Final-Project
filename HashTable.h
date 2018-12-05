@@ -30,34 +30,27 @@ private:
 		}
 		//If there is more than one node
 		else {
-			//If the node to be deleted is equal to the head
-			if (toRemove == arr) {
-				HashNode<ot> *temp = arr;
-				arr = arr->getNext();
-				length--;
-				delete temp;
+			//If the node to be deleted is equal to the head of its list
+			if (toRemove->getNext() == nullptr) {
+				toRemove->setData(nullptr);
+				toRemove->setKey("");
 			}
 			//If the node to be deleted is not the head
 			else {
 				HashNode<ot> *pPrev = nullptr;//Previous pointer
-				HashNode<ot> *pCurr = arr;//Current pointer
+				HashNode<ot> *pCurr = toRemove;//Current pointer
 				int counter = 0;//Counter starts at 0
 				//Traverse the entire HashTable
-				while (counter < length)
+				while (pCurr->getNext() != nullptr && pCurr->getKey() != toRemove->getKey())
 				{
 					pPrev = pCurr;
 					pCurr = pCurr->getNext();
-					//If found. Break out of the while loop.
-					if (pCurr == toRemove) {
-						counter = length;
-					}
-					counter++;
 				}
 				//Set the previous node of the current which equals toRemove
 				//to point to the node that the current points to
 				pPrev->setNext(pCurr->getNext());
-				length--;//Minus total by 1
-				delete pCurr;//Delete the current node
+				if(pCurr->getNext() == nullptr)
+					delete pCurr;//Delete the current node
 			}
 		}
 	}
@@ -73,7 +66,7 @@ public:
 		length = s;
 	}
 	//Adds an object to the table
-	void add(std::string key, ot& data) {
+	void add(std::string key, ot data) {
 		HashNode<ot>* temp = arr + hash(key);
 		if (temp->getData() == nullptr) {
 			temp->setData(data);
@@ -86,21 +79,20 @@ public:
 
 		HashNode<ot>* add = new HashNode<ot>(data, key);
 		temp->setNext(add);
-		length++;
 	}
 
-	ot* get(const std::string key)
+	ot* search(const std::string key)
 	{
-		HashNode<ot> *entry = &(arr[hash(key)]);
-		std::cout << "Key " << key << " with hash " << hash(key) << std::endl;
-		std::cout << *(entry->getData());
+		HashNode<ot> *entry = (arr + hash(key));
 		if (entry == nullptr) return nullptr;
-		if (entry->getKey() == key) return entry->getData();
-		while (entry->getNext() != nullptr && entry->getKey() != key) {
+		if (entry->getKey() == key)
+			return entry->getData();
+		while (entry->getKey() != key && entry->getNext() != nullptr) {
 			entry = entry->getNext();
 		}
-		if (entry->getNext() == nullptr) return nullptr;
-		return entry->getData();
+		if (entry->getKey() == key)
+			return entry->getData();
+		return nullptr;
 	}
 
 	void remove(std::string key) {
