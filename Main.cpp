@@ -440,15 +440,16 @@ void inorderChartDistance(Contact *from, BinaryNode<Contact *> *data)
 void printValueTable(HashTable<Contact *> *data) {
 	for (int i = 0; i < data->getSize(); i++) {
 		std::cout << i + 1 << ")." << " ";
-		HashNode<Contact*>* temp = data->arr[i].getNext();
-		if (temp->getData() != nullptr) {
+		HashNode<Contact*>* temp = NULL;
+		if (data->arr + i != NULL) {
+			temp = data->arr[i].getNext();
 			std::cout << (*temp->getData())->getName();
 			temp = temp->getNext();
-		}
-		temp = temp->getNext();
-		while (temp != nullptr) {
-			std::cout << ", " << (*temp->getData())->getName();
-			temp = temp->getNext();
+
+			while (temp != nullptr) {
+				std::cout << ", " << (*temp->getData())->getName();
+				temp = temp->getNext();
+			}
 		}
 		std::cout << "NULL" << std::endl;
 	}
