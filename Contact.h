@@ -14,7 +14,7 @@ public:
 		address = "Middle of Nowhere";
 		int nums[] =
 		{
-			650, 555, 5555
+			0, 0, 0
 		};
 		contactNum = nums;
 		location = Location();
@@ -25,6 +25,10 @@ public:
 		address = a;
 		contactNum = num;
 		location = l;
+	}
+	~Contact()
+	{
+		delete[] contactNum;
 	}
 	std::string getName() { return name; }
 	std::string getAdress() { return address; }
@@ -59,9 +63,9 @@ public:
 	}
 	friend std::ostream& operator<<(std::ostream& out, const Contact& ct)
 	{
-		out << "Name		:" << ct.name << std::endl;
+		out << "Name        :" << ct.name << std::endl;
 		out << "Phone Number:" << ct.contactNum[0] << ct.contactNum[1] << ct.contactNum[2] << std::endl;
-		out << "Address		:" << ct.address << std::endl;
+		out << "Address     :" << ct.address << std::endl;
 		return out;
 	}
 };

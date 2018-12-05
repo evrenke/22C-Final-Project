@@ -59,7 +59,7 @@ public:
 				}
 				temp = temp->getLeftChild();
 			}
-			else
+			else // >=
 			{
 				if (temp->getRightChild() == nullptr)
 				{
@@ -75,13 +75,15 @@ public:
 	BinaryNode<T>* search(T data)
 	{
 		BinaryNode<T>* pSearch = root;
+		std::cout << "Now searching: " << *data << std::endl;
 		while (true)
 		{
-			if (*pSearch->getData() == data)
+			if (*(pSearch->getData()) == data)
 			{
+				std::cout << "found " << **(pSearch->getData()) << std::endl; 
 				return pSearch;
 			}
-			else if (*pSearch->getData() > data)
+			else if (*(pSearch->getData()) > data)
 			{
 				if (pSearch->getLeftChild() == nullptr) return nullptr;
 				pSearch = pSearch->getLeftChild();
