@@ -105,6 +105,7 @@ int main()
 			std::cout << name << std::endl;
 			std::cout << "What is their phone number?(formatted as 650 555 1234)" << std::endl;
 			nums = getPhoneNumberInput();
+			phoneNumber = std::to_string(nums[0]) + std::to_string(nums[1]) + std::to_string(nums[2]);
 			std::cout << name << std::endl << phoneNumber << std::endl;
 			std::cout << "Where does your friend live?" << std::endl;
 			address = mainmenu.takeStringInput();
@@ -130,27 +131,27 @@ int main()
 			std::cout << "Delete friend contact:" << std::endl;
 			std::cout << "Which friend's contact do you want removed?" << std::endl;
 			name = mainmenu.takeStringInput();
-			newContact = new Contact(name, "", new int[3]{ 0,0,0 }, Location());
-			if (contactBST.search(newContact))
+			if (contactHash.get(name))
 			{
+				newContact = *contactHash.get(name);
 				std::cout << "We did it team" << std::endl;
+				std::cout << *newContact;
+				contactHash.remove(name);
 			}
 			else std::cout << "We'll get em next time" << std::endl;
-
-			delete newContact;
 			break;
 		case 3:
-			std::cout << "Search by friend name: " << std::endl;
-			std::cout << "What is the name of the friend you want to search?" << std::endl;
+			//fix search function first
+			std::cout << "Search friend contact:" << std::endl;
+			std::cout << "Which friend's contact do you want to see?" << std::endl;
 			name = mainmenu.takeStringInput();
-			newContact = new Contact(name, "Doesnt matter street", new int[3]{ 0,0,0 }, Location());
-			contactPTR = *(contactBST.search(newContact))->getData();
-			if (contactPTR)
+			if (contactHash.get(name))
 			{
-				std::cout << "Your friend " << name << " was found with this information:" << std::endl;
-				std::cout << *contactPTR;
-				delete newContact;
+				newContact = *contactHash.get(name);
+				std::cout << "We did it team" << std::endl;
+				std::cout << *newContact;
 			}
+			else std::cout << "We'll get em next time" << std::endl;
 			break;
 		case 4:
 			std::cout << "Modify friend contact info:" << std::endl;
@@ -236,12 +237,9 @@ int * getPhoneNumberInput()
 		}
 		else
 		{
-			numbers = new int[3]
-			{
-				std::stoi(number.substr(0,3)),
-				std::stoi(number.substr(4,7)),
-				std::stoi(number.substr(7,10))
-			};
+			numbers[0] = std::stoi(number.substr(0, 3));
+			numbers[1] = std::stoi(number.substr(3, 3));
+			numbers[2] = std::stoi(number.substr(6, 9));
 			validNumber = true;
 		}
 	} while (! validNumber);

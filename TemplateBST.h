@@ -22,6 +22,58 @@ private:
 		}
 		return temp;
 	}
+protected:
+	BinaryNode<T>* searchAsNode(BinaryNode<T> *pSearch, T data)
+	{
+		if (root == nullptr || *(root->getData()) == data)
+			return root;//returns node or nullptr
+
+						// Key is greater than root's key 
+		if (*(root->getData()) < data)
+			return searchAsNode(root->getRightChild(), data);
+
+		// Key is smaller than root's key 
+		return searchAsNode(root->getLeftChild(), data);
+	}
+
+	BinaryNode<T> * remove(T toRemove)
+	{
+		return DeleteNodeInBST(root, toRemove);
+	}
+	BinaryNode<T> * DeleteNodeInBST(BinaryNode<T>* root, T data)
+	{
+		if (root == NULL) return root;
+		else if (data < root->getData())
+			root->setLeftChild(DeleteNodeInBST(root->getLeftChild(), data));
+		else if (data > root->getData())
+			root->setRightChild(DeleteNodeInBST(root->getRightChild(), data));
+		else
+		{
+
+			if (root->getLeftChild() == nullptr)
+			{
+				BinaryNode<T> *temp = root->getRightChild();
+				free(root);
+				return temp;
+			}
+			else if (root->getRightChild() == nullptr)
+			{
+				BinaryNode<T> *temp = root->getLeftChild();
+				free(root);
+				return temp;
+			}
+			// node with two children: Get the inorder successor (smallest 
+			// in the right subtree) 
+			BinaryNode<T> temp = getLeftmost(root->getRightChild());
+
+			// Copy the inorder successor's content to this node 
+			root->setData(temp.getData());
+
+			// Delete the inorder successor 
+			root->setRightChild(DeleteNodeInBST(root->getRightChild(), temp.getData()));
+		}
+		return root;
+	}
 public:
 	BinaryNode<T>* root;
 	BST() { root = NULL; }
@@ -33,7 +85,7 @@ public:
 		root = nullptr;
 	}
 
-	//Overloads using Person are a wrapper for the BinaryNode version so you don't need to manually define the node.
+	//Overloads using T are a wrapper for the BinaryNode version so you don't need to manually define the node.
 	//Other one may still be called with no issue if there is a Node that must be added.
 	void add(T *toAdd)
 	{
@@ -74,93 +126,7 @@ public:
 	//Returns NULL if none is found. Beware of carelessly dereferencing it
 	BinaryNode<T>* search(T data)
 	{
-		BinaryNode<T>* pSearch = root;
 		std::cout << "Now searching: " << *data << std::endl;
-		while (true)
-		{
-			if (*(pSearch->getData()) == data)
-			{
-				std::cout << "found " << **(pSearch->getData()) << std::endl; 
-				return pSearch;
-			}
-			else if (*(pSearch->getData()) > data)
-			{
-				if (pSearch->getLeftChild() == nullptr) return nullptr;
-				pSearch = pSearch->getLeftChild();
-			}
-			else
-			{
-				if (pSearch->getRightChild() == nullptr) return nullptr;
-				pSearch = pSearch->getRightChild();
-			}
-		}
-	}
-
-	BinaryNode<T> * remove(T toRemove)
-	{
-		BinaryNode<T>** pSearch = &root;
-		while (toRemove != (*pSearch)->getData())
-		{
-			if ((*pSearch)->getData() > toRemove) {
-				if ((*pSearch)->getLeftChild() == nullptr)
-					break;
-				*pSearch = (*pSearch)->getLeftChild();
-			}
-			else if ((*pSearch)->getData() < toRemove) {
-				if ((*pSearch)->getRightChild() == nullptr)
-					break;
-				*pSearch = (*pSearch)->getRightChild();
-			}
-		}
-		return DeleteNodeInBST(pSearch);
-	}
-	BinaryNode<T> * DeleteNodeInBST(BinaryNode<T>* root, int data)
-	{
-		if (root == NULL) return root;
-		else if (data <= root->getData())
-			root->setLeftChild(DeleteNodeInBST(root->getLeftChild(), data));
-		else if (data> root->getData())
-			root->setRightChild(DeleteNodeInBST(root->getRightChild(), data));
-		else
-		{
-			//No child
-			if (root->getRightChild() == nullptr && root->getLeftChild() == nullptr)
-			{
-				delete root;
-				root = nullptr;
-			}
-			//One child 
-			else if (root->getRightChild() == nullptr)
-			{
-				BinaryNode<T>* temp = root;
-				root = root->getLeftChild();
-				delete temp;
-			}
-			else if (root->getLeftChild() == nullptr)
-			{
-				BinaryNode<T>* temp = root;
-				root = root->getRightChild();
-				delete temp;
-			}
-			//two child
-			else
-			{
-				BinaryNode<T>* temp = findmax(root);
-				root->setData(temp->getData());
-				root->setLeftChild(DeleteNodeInBST(root->getLeftChild(), temp->getData()));
-			}
-		}
-		return root;
-	}
-	BinaryNode<T>* FindMax(BinaryNode<T>* root)
-	{
-		if (root == nullptr)
-			return nullptr;
-
-		while (root->getRightChild() != nullptr)
-		{
-			root = root->getRightChild();
-		}
-		return root;
+		return searchAsNode(root, data);
 	}
 };
