@@ -4,10 +4,10 @@ Authors: Evren Keskin, Jason Hagene, Oh Reum Kwom, Tommasso M Framba
 Date: 12/05/2018
 
 Description:
-	Fuck idk
+	This program will use data structures and algorithms to allow the user to interact with a list of contact information
+
 
 questions for tomorrow:
-what unit are distances
 how to format hash table not by pointers
 how to make a distance table
 how to fix chart
@@ -56,6 +56,8 @@ void eraseContacts(BinaryNode<T> *data);
 
 void chart(BinaryNode<Contact *> *data);
 void inorderChart(BinaryNode<Contact *> *data);
+void chartDistance(Contact *from, BinaryNode<Contact *> *data);
+void inorderChartDistance(Contact *from, BinaryNode<Contact *> *data);
 void printValueTable(HashTable<Contact *> *data);
 void BSTPrinter(int tabs, BinaryNode<Contact *> *data);
 
@@ -103,7 +105,6 @@ int main()
 		longitude = atof(coor.c_str());
 		location = Location(latitude, longitude);
 		newContact = new Contact(name, address, nums, location);
-		//std::cout << *newContact;
 		contactHash.add(name, newContact);
 		contactBST.add(newContact);
 	}
@@ -117,7 +118,7 @@ int main()
 		"Delete A Contact", // DONE
 		"Search Contacts by name", // DONE
 		"Modify Contact Information(location, phone number, etc.)", // DONE
-		"List all users", // no , chart not alphabetical, hash table and distance table not implemented
+		"List all users", // no, hash table not done
 		"Print Tree by name of User", // DONE
 		"Distance Calculator", // DONE
 		"Leave the menu", // DONE... I mean it wasnt that hard
@@ -159,11 +160,11 @@ int main()
 			std::cout << "Where does your friend live?" << std::endl;
 			address = mainmenu.takeStringInput();
 			std::cout << name << std::endl << phoneNumber << std::endl << address << std::endl;
-			std::cout << "What is their longitude and latitude?" << std::endl;
+			std::cout << "What is their latitude and longitude?" << std::endl;
 			std::cout << "Latitude:" << std::endl;
-			latitude = mainmenu.takeDoubleInput();
+			latitude = mainmenu.takeRangedDoubleInput(-90, 90);
 			std::cout << "Longitude:" << std::endl;
-			longitude = mainmenu.takeDoubleInput();
+			longitude = mainmenu.takeRangedDoubleInput(-180, 180);
 			std::cout << "Name        :" << name << std::endl;
 			std::cout << "Phone Number:" << phoneNumber << std::endl;
 			std::cout << "Address     :" << address << std::endl;
@@ -217,51 +218,60 @@ int main()
 					std::cout << "Do you want to modify their address?(y/n)" << std::endl;
 					response = mainmenu.takeCharInput();
 				} while (response != 'y' && response != 'Y' && response != 'n' && response != 'N');
-				if (response != 'y' && response != 'Y')
+				if (response == 'y' || response == 'Y')
 				{
 					std::cout << "Enter their new address:" << std::endl;
 					address = mainmenu.takeStringInput();
 					newContact->setAddress(address);
+					outputFile.open(dataFile);
 					updateFiles(&outputFile, contactBST.root);
+					outputFile.close();
 				}
 				do
 				{
 					std::cout << "Do you want to modify their phone number?(y/n)" << std::endl;
 					response = mainmenu.takeCharInput();
 				} while (response != 'y' && response != 'Y' && response != 'n' && response != 'N');
-				if (response != 'y' && response != 'Y')
+				if (response == 'y' || response == 'Y')
 				{
 					std::cout << "Enter their new number:" << std::endl;
 					nums = getPhoneNumberInput();
 					newContact->setContactNum(nums);
+					outputFile.open(dataFile);
 					updateFiles(&outputFile, contactBST.root);
+					outputFile.close();
 				}
 				do
 				{
 					std::cout << "Do you want to modify their latitude?(y/n)" << std::endl;
 					response = mainmenu.takeCharInput();
 				} while (response != 'y' && response != 'Y' && response != 'n' && response != 'N');
-				if (response != 'y' && response != 'Y')
+				if (response == 'y' || response == 'Y')
 				{
 					std::cout << "Enter their new latitude:" << std::endl;
-					latitude = mainmenu.takeDoubleInput();
+					latitude = mainmenu.takeRangedDoubleInput(-90, 90);
 					newContact->setLocation(Location(latitude, newContact->getLocation().getLongitude()));
+					outputFile.open(dataFile);
 					updateFiles(&outputFile, contactBST.root);
+					outputFile.close();
 				}
 				do
 				{
 					std::cout << "Do you want to modify their longitude?(y/n)" << std::endl;
 					response = mainmenu.takeCharInput();
 				} while (response != 'y' && response != 'Y' && response != 'n' && response != 'N');
-				if (response != 'y' && response != 'Y')
+				if (response == 'y' || response == 'Y')
 				{
 					std::cout << "Enter their new longitude:" << std::endl;
-					longitude = mainmenu.takeDoubleInput();
+					longitude = mainmenu.takeRangedDoubleInput(-180, 180);
 					newContact->setLocation(Location(newContact->getLocation().getLatitude(), longitude));
+					outputFile.open(dataFile);
 					updateFiles(&outputFile, contactBST.root);
+					outputFile.close();
 				}
 			}
 			else std::cout << "The contact to remove has not been found" << std::endl;
+			break;
 		case 5:
 			std::cout << "List all friends:" << std::endl;
 			chosenList = lister.printOptionsList();
@@ -288,12 +298,13 @@ int main()
 						std::cout << "The contact:" << std::endl;
 						newContact = *contactHash.search(name);
 						std::cout << *newContact << std::endl;
+						break;
 					}
 					else std::cout << "The contact hasnt been found" << std::endl;
-				} while (isUsingDistanceCal && newContact == nullptr);
+				} while (isUsingDistanceCal);
 				if(isUsingDistanceCal)
 				{ 
-
+					chartDistance(newContact, contactBST.root);
 				}
 				break;
 			}
@@ -320,10 +331,11 @@ int main()
 					std::cout << "The first contact:" << std::endl;
 					newContact = *contactHash.search(name);
 					std::cout << *newContact << std::endl;
+					break;
 				}
 				else std::cout << "The contact hasnt been found" << std::endl;
-			} while (isUsingDistanceCal && newContact == nullptr);
-			do
+			} while (isUsingDistanceCal);
+			while (isUsingDistanceCal)
 			{
 				chart(contactBST.root);
 				std::cout << std::endl << "Find the second contact by name:(type a space to exit)" << std::endl;
@@ -335,13 +347,14 @@ int main()
 					std::cout << "They have been found." << std::endl;
 					newContact2 = *contactHash.search(name);
 					std::cout << *newContact2;
+					break;
 				}
 				else std::cout << "The contact hasnt been found" << std::endl;
-			} while (isUsingDistanceCal && newContact2 == nullptr);
+			}
 			if (isUsingDistanceCal)
 			{
 				std::cout << "Distance of " << newContact->getName() << " and " << newContact2->getName() << std::endl;
-				std::cout << newContact->getLocation().getDistance(newContact2->getLocation()) << std::endl;
+				std::cout << newContact->getLocation().getDistance(newContact2->getLocation()) << " miles " << std::endl;
 			}
 			break;
 		case 8:
@@ -374,8 +387,8 @@ void chart(BinaryNode<Contact *> *data)
 	std::cout << std::left << std::setw(20) << std::setfill(' ') << "Name" << " | "
 		<< std::left << std::setw(15) << std::setfill(' ') << "Phone Number" << " | "
 		<< std::left << std::setw(40) << std::setfill(' ') << "Address" << " | "
-		<< std::left << std::setw(27) << std::setfill(' ') << "Coordinates" << " |" << std::endl;
-	std::cout << std::string(113, '-') << "\n";
+		<< std::left << std::setw(29) << std::setfill(' ') << "Coordinates" << " |" << std::endl;
+	std::cout << std::string(115, '-') << "\n";
 	inorderChart(data);
 
 }
@@ -385,23 +398,58 @@ void inorderChart(BinaryNode<Contact *> *data)
 	if (data == nullptr)
 		return;
 	inorderChart(data->getLeftChild());
-	std::cout << std::left << std::setw(16) << std::setfill(' ') << data->getData()->getName() << " |"
-		<< std::left << std::setw(10) << std::setfill(' ') << data->getData()->getNumStr() << "|"
-		<< std::left << std::setw(30) << std::setfill(' ') << data->getData()->getAddress() << "|"
-		<< std::left << std::setw(25) << std::setfill(' ') << data->getData()->getLocation().getCoordinates() << "|" << std::endl;
+	std::cout << std::left << std::setw(20) << std::setfill(' ') << data->getData()->getName() << " | "
+		<< std::left << std::setw(15) << std::setfill(' ') << data->getData()->getNumStr() << " | "
+		<< std::left << std::setw(40) << std::setfill(' ') << data->getData()->getAddress() << " | "
+		<< std::left << std::setw(27) << std::setfill(' ') << data->getData()->getLocation().getCoordinates() << " |" << std::endl;
 	inorderChart(data->getRightChild());
+}
+
+void chartDistance(Contact *from, BinaryNode<Contact *> *data)
+{
+	//		Name		|	Phone Number |       Address       |     Coordinates    |     Distance     |
+	//------------|---------------|---------------------|--------------------|
+	// printfspace|               |                     |                    |
+	//            |               |                     |                    |
+	//            |               |                     |                    |
+	//            |               |                     |                    |
+	std::cout << std::left << std::setw(20) << std::setfill(' ') << "Name" << " | "
+		<< std::left << std::setw(15) << std::setfill(' ') << "Phone Number" << " | "
+		<< std::left << std::setw(40) << std::setfill(' ') << "Address" << " | "
+		<< std::left << std::setw(29) << std::setfill(' ') << "Coordinates" << " | "
+		<< std::left << std::setw(13) << std::setfill(' ') << "Distance to " << from->getName() << " (in miles)"<< std::endl;
+	std::cout << std::string(135, '-') << "\n";
+	inorderChartDistance(from, data);
+
+}
+
+void inorderChartDistance(Contact *from, BinaryNode<Contact *> *data)
+{
+	if (data == nullptr)
+		return;
+	inorderChartDistance(from, data->getLeftChild());
+	if(data->getData()->getName() != from->getName())
+	std::cout << std::left << std::setw(20) << std::setfill(' ') << data->getData()->getName() << " | "
+		<< std::left << std::setw(15) << std::setfill(' ') << data->getData()->getNumStr() << " | "
+		<< std::left << std::setw(40) << std::setfill(' ') << data->getData()->getAddress() << " | "
+		<< std::left << std::setw(27) << std::setfill(' ') << data->getData()->getLocation().getCoordinates() << " | " 
+		<< std::left << std::setw(20) << std::setfill(' ') << from->getLocation().getDistance(data->getData()->getLocation())  << std::endl;
+	inorderChartDistance(from, data->getRightChild());
 }
 
 void printValueTable(HashTable<Contact *> *data) {
 	for (int i = 0; i < data->getSize(); i++) {
 		std::cout << i + 1 << ")." << " ";
-			HashNode<Contact*>* temp = data->arr[i].getNext();
+		HashNode<Contact*>* temp = data->arr[i].getNext();
+		if (temp->getData() != nullptr) {
 			std::cout << (*temp->getData())->getName();
 			temp = temp->getNext();
-			while (temp != nullptr) {
-				std::cout << ", " << (*temp->getData())->getName();
-				temp = temp->getNext();
-			}
+		}
+		temp = temp->getNext();
+		while (temp != nullptr) {
+			std::cout << ", " << (*temp->getData())->getName();
+			temp = temp->getNext();
+		}
 		std::cout << "NULL" << std::endl;
 	}
 }

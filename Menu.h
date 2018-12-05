@@ -33,6 +33,7 @@ public:
 	int getOptionsLength() { return length; }
 	int takeRangedIntInput(int min, int max);
 	int takeIntegerInput();
+	double takeRangedDoubleInput(double min, double max);
 	double takeDoubleInput();
 	char takeCharInput();
 	std::string takeStringInput();
@@ -69,7 +70,7 @@ int Menu::takeIntegerInput()
 	return takeRangedIntInput(-2147483647, 2147483647); // max range
 }
 
-double Menu::takeDoubleInput()
+double Menu::takeRangedDoubleInput(double min, double max)
 {
 	double chosen = 0;
 	bool properNumber = false;
@@ -81,7 +82,8 @@ double Menu::takeDoubleInput()
 		std::getline(std::cin, input);
 		try {
 			chosen = std::stod(input);
-			properNumber = true;
+			if (chosen >= min && chosen <= max)
+				properNumber = true;
 		}
 		catch (...)
 		{
@@ -90,6 +92,11 @@ double Menu::takeDoubleInput()
 	} while (!properNumber);
 	system("CLS");
 	return chosen;
+}
+
+double Menu::takeDoubleInput()
+{
+	return Menu::takeRangedDoubleInput(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
 }
 
 char Menu::takeCharInput()

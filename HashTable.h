@@ -38,7 +38,7 @@ private:
 			else {
 				HashNode<ot> *pPrev = nullptr;//Previous pointer
 				HashNode<ot> *pCurr = toRemove;//Current pointer
-				int counter = 0;//Counter starts at 0
+
 				//Traverse the entire HashTable
 				while (pCurr->getNext() != nullptr && pCurr->getKey() != toRemove->getKey())
 				{

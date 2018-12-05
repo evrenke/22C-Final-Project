@@ -6,6 +6,10 @@ Bob Bobson
 123 Bob Street, San Jose
 4085556789
 37.500000	-120.100000
+Audrey Li Grace
+4321 Alves Drive, San Jose
+1235556789
+37.324900	-122.040100
 Evren Keskin
 1462 Lexington Drive, San Jose
 6508233393
@@ -26,3 +30,11 @@ Tommaso M. Framba
 1454 Tommaso Drive, San Jose
 6508431234
 37.402000	-121.848800
+Tomas Patro
+456 Real Street, San Jose
+4089871234
+31.123000	13.700000
+dyhsgfuyjfgjdsgf
+432 wkerlhgsdifgsdfg avenue, San jose
+9996501253
+37.100000	-121.670000
