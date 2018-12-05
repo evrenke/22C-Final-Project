@@ -1,22 +1,28 @@
 /*
-Authors: Evren Keskin, Jason Hagene, Oh Reum Kwom, Tommasso M Framba
+	
+	Authors: Evren Keskin, Jason Hagene, Oh Reum Kwom, Tommasso M Framba
 
-Date: 12/05/2018
+	Date: 12/05/2018
 
-Description:
+	Description:
 	This program will use data structures and algorithms to allow the user to interact with a list of contact information
+	
+	A hashtable and a BST database of pointers are created to dynamic memory of contact objects
+	Then, the user is repeatedly prompted for any kind of interaction to have with the database
+		They can add a new contact to the database
+		They can remove a contact from the database
+		They can search the database for a contact
+		They can modify a contacts information (excluding the name)
+		They can list the contacts as whole
+			As a chart
+			As the hashtable
+			As a distance based chart from a contact of their choice
+		They can see the contacts as the BST that they're stored in
+		They can look up the distance between two contacts of their choice
+		Each step is followed by the updating of the database files
+	When the user is done the program will delete the contacts after updating the database
+	The hashtable and BST will decontruct themselves to free up space
 
-
-questions for tomorrow:
-how to format hash table not by pointers
-how to make a distance table
-how to fix chart
-adding headers and comments
-	describe authors of documents
-clean up code
-
-MEASURE EFFICIENCY !!!
-FINISH DATABASE !!!
 */
 #include <string>
 #include <iostream>
@@ -27,26 +33,6 @@ FINISH DATABASE !!!
 #include "Contact.h"
 #include "TemplateBST.h"
 #include "HashTable.h"
-
-/*
-#define _CRTDBG_MAP_ALLOC  
-#include <stdlib.h>  
-#include <crtdbg.h>  
-*/
-
-/*
-https://simplemaps.com/data/us-cities
-*/
-
-/*
-Read contact info from file into BST
-In a loop
-	Ask user for option
-	Do result of option
-	Update files
-	Ask if user wants to exit program
-*/
-
 
 template<class T>
 void updateFiles(std::ofstream *out, BinaryNode<T> *data);
@@ -96,7 +82,7 @@ int main()
 		nums = new int[3]
 		{
 			std::stoi(phoneNumber.substr(0, 3)),
-			std::stoi(phoneNumber.substr(3, 3)),//why this works and 3, 6 doesn't I will never know
+			std::stoi(phoneNumber.substr(3, 3)),
 			std::stoi(phoneNumber.substr(6, 10))
 		};
 		coor = coordinates.substr(0, coordinates.find('\t'));
@@ -114,14 +100,14 @@ int main()
 	int optionsSize = 8;
 	std::string options[] =
 	{
-		"Add New Contact", // DONE
-		"Delete A Contact", // DONE
-		"Search Contacts by name", // DONE
-		"Modify Contact Information(location, phone number, etc.)", // DONE
-		"List all users", // no, hash table not done
-		"Print Tree by name of User", // DONE
-		"Distance Calculator", // DONE
-		"Leave the menu", // DONE... I mean it wasnt that hard
+		"Add New Contact", 
+		"Delete A Contact",
+		"Search Contacts by name",
+		"Modify Contact Information(location, phone number, etc.)", 
+		"List all users",
+		"Print Tree by name of User", 
+		"Distance Calculator",
+		"Leave the menu",
 
 	};
 	Menu mainmenu = Menu(options, optionsSize);
@@ -142,7 +128,8 @@ int main()
 
 	while (answer != mainmenu.getOptionsLength()) // exiting
 	{
-		//add greeting here
+		std::cout << "Welcome to Find Your Friends! " << std::endl;
+		std::cout << "------------------------------" << std::endl;
 		answer = mainmenu.printOptionsList();
 
 		switch (answer)
@@ -177,7 +164,6 @@ int main()
 			contactBST.add(newContact);
 			break;
 		case 2:
-			//fix search function first
 			std::cout << "Delete friend contact:" << std::endl;
 			std::cout << "Which friend's contact do you want removed?" << std::endl;
 			name = mainmenu.takeStringInput();
@@ -284,7 +270,7 @@ int main()
 				std::cout << "Hash Table Of Values (Names Only)" << std::endl;
 				printValueTable(&contactHash);
 				break;
-			case 3://horrible list as distance from a certain contact, or possibly a 'main' contact
+			case 3:// list as distance from a certain contact
 				isUsingDistanceCal = true;
 				do
 				{
@@ -358,7 +344,7 @@ int main()
 			}
 			break;
 		case 8:
-			std::cout << "You chose to exit the menu, good for you!" << std::endl;
+			std::cout << "Thank you for using Find Your Friends!" << std::endl;
 			break;
 		}
 		outputFile.open(dataFile);
@@ -370,20 +356,12 @@ int main()
 	//ONLY DELETE CONTACTS FROM BST, THEN DECONTRUCT HASHTABLE WITHOUT WORRYING
 	eraseContacts(contactBST.root);
 	contactBST.~ContactBST();
-	//contactHash.~HashTable();
-
-	//_CrtDumpMemoryLeaks();
+	contactHash.~HashTable();
 	return 0;
 }
 
 void chart(BinaryNode<Contact *> *data)
 {
-	//		Name		|	Phone Number |       Address       |     Coordinates    |     Distance     |
-	//------------|---------------|---------------------|--------------------|
-	// printfspace|               |                     |                    |
-	//            |               |                     |                    |
-	//            |               |                     |                    |
-	//            |               |                     |                    |
 	std::cout << std::left << std::setw(20) << std::setfill(' ') << "Name" << " | "
 		<< std::left << std::setw(15) << std::setfill(' ') << "Phone Number" << " | "
 		<< std::left << std::setw(40) << std::setfill(' ') << "Address" << " | "
@@ -440,16 +418,15 @@ void inorderChartDistance(Contact *from, BinaryNode<Contact *> *data)
 void printValueTable(HashTable<Contact *> *data) {
 	for (int i = 0; i < data->getSize(); i++) {
 		std::cout << i + 1 << ")." << " ";
-		HashNode<Contact*>* temp = NULL;
-		if (data->arr + i != NULL) {
-			temp = data->arr[i].getNext();
+		HashNode<Contact*>* temp = data->arr[i].getNext();
+		if (temp->getData() != nullptr) {
 			std::cout << (*temp->getData())->getName();
 			temp = temp->getNext();
-
-			while (temp != nullptr) {
-				std::cout << ", " << (*temp->getData())->getName();
-				temp = temp->getNext();
-			}
+		}
+		temp = temp->getNext();
+		while (temp != nullptr) {
+			std::cout << ", " << (*temp->getData())->getName();
+			temp = temp->getNext();
 		}
 		std::cout << "NULL" << std::endl;
 	}
