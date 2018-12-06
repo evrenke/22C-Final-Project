@@ -1,23 +1,15 @@
-Aaron Aaronson
-111 Alphabet Street, San Jose
-1235551234
-38.000000	-120.099000
-Bob Bobson
-123 Bob Street, San Jose
-4085556789
-37.500000	-120.100000
-Audrey Li Grace
-4321 Alves Drive, San Jose
-1235556789
-37.324900	-122.040100
-Evren Keskin
-1462 Lexington Drive, San Jose
-6508233393
-37.202000	-121.848800
 Jason Hagene
 1458 Smith Drive, San Jose
 4088233393
 37.302000	-121.848800
+Bob Bobson
+123 Bob Street, San Jose
+4085556789
+37.500000	-120.100000
+Tommaso M. Framba
+1454 Tommaso Drive, San Jose
+6508431234
+37.402000	-121.848800
 Oh Reum Kwon
 1460 David Drive, San Jose
 6508324567
@@ -26,15 +18,103 @@ Tim
 12 Short Street, Cupertino
 4081231234
 37.500000	-119.576800
-Tommaso M. Framba
+Aaron Aaronson
+111 Alphabet Street, San Jose
+1235551234
+38.000000	-120.099000
+Evren Keskin
+1462 Lexington Drive, San Jose
+6508233393
+37.202000	-121.848800
+John Doe
+1234 John Ct. San Jose
+4089312455
+36.202000    -120.848800
+George Smith
+4892 Smith way, San Jose
+4082829483
+37.238509    -120.373950
+Joseph Smith
+4892 Smith way, San Jose
+4082749242
+37.238509    -120.373950
+Jason Hagene2
+1458 Smith Drive, San Jose
+4088233393
+37.302000    -121.848800
+Bob Bobson2
+123 Bob Street, San Jose
+4085556789
+37.500000    -120.100000
+Tommaso M. Framba2
 1454 Tommaso Drive, San Jose
 6508431234
-37.402000	-121.848800
-Tomas Patro
-456 Real Street, San Jose
-4089871234
-31.123000	13.700000
-dyhsgfuyjfgjdsgf
-432 wkerlhgsdifgsdfg avenue, San jose
-9996501253
-37.100000	-121.670000
+37.402000    -121.848800
+Oh Reum Kwon2
+1460 David Drive, San Jose
+6508324567
+37.502000    -121.848800
+Tim2
+12 Short Street, Cupertino
+4081231234
+37.500000    -119.576800
+Aaron Aaronson2
+111 Alphabet Street, San Jose
+1235551234
+38.000000    -120.099000
+Evren Keskin2
+1462 Lexington Drive, San Jose
+6508233393
+37.202000    -121.848800
+John Doe2
+1234 John Ct. San Jose
+4089312455
+36.202000    -120.848800
+George Smith2
+4892 Smith way, San Jose
+4082829483
+37.238509    -120.373950
+Joseph Smith2
+4892 Smith way, San Jose
+4082749242
+37.238509    -120.373950
+Jason Hagene3
+1458 Smith Drive, San Jose
+4088233393
+37.302000    -121.848800
+Bob Bobson3
+123 Bob Street, San Jose
+4085556789
+37.500000    -120.100000
+Tommaso M. Framba3
+1454 Tommaso Drive, San Jose
+6508431234
+37.402000    -121.848800
+Oh Reum Kwon3
+1460 David Drive, San Jose
+6508324567
+37.502000    -121.848800
+Tim3
+12 Short Street, Cupertino
+4081231234
+37.500000    -119.576800
+Aaron Aaronson3
+111 Alphabet Street, San Jose
+1235551234
+38.000000    -120.099000
+Evren Keskin3
+1462 Lexington Drive, San Jose
+6508233393
+37.202000    -121.848800
+John Doe3
+1234 John Ct. San Jose
+4089312455
+36.202000    -120.848800
+George Smith3
+4892 Smith way, San Jose
+4082829483
+37.238509    -120.373950
+Joseph Smith3
+4892 Smith way, San Jose
+4082749242
+37.238509    -120.373950
